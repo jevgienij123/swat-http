@@ -90,7 +90,7 @@ public function Send(Message Message, string URL, name Method, ClientOwner Owner
         Port = 80;
     }
     // Dont url-encode leading slashes in location
-    Location = class'HTTP.Utils'.static.EncodeUrl(Location, "/");
+    Location = class'HTTP.Utils'.static.EncodeUrl(Location, ";,/?:@&=+$");
     // key1=value2&key2=value query string (url-safe)
     QueryString = Message.AssembleQueryString();
     // Headers
