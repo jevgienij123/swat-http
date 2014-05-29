@@ -28,6 +28,13 @@ class Link extends IPDrv.TcpLink;
  */
 const BUFFER_SIZE=10000;
 
+/**
+ * Make sure response length is no greater than this value (in bytes)
+ * Drop link in case of length excess
+ * @type int
+ */
+const MAX_RESPONSE_LENGTH=4096;
+
 enum eState
 {
     STATE_NONE,         /* Non-valid state */
@@ -43,6 +50,7 @@ enum eLinkError
 {
     LE_RESOLVE,         /* Hostname resolve error */
     LE_TIMEOUT,         /* Stage timeout error */
+    LE_LENGTH,          /* Request/response length limit excess */
 };
 
 /**
@@ -110,6 +118,12 @@ var protected float TimeoutClose;
  * @type float
  */
 var protected float Countdown;
+
+/**
+ * Current response length
+ * @type int
+ */
+var protected int ResponseLength;
 
 /**
  * Call this delegate whenever hostname is resolved to an IP address
@@ -253,6 +267,7 @@ event Opened()
 
 /**
  * Call the delegate whenever data is received
+ * Check whether response length fits into the response length limit
  * 
  * @param   string Data
  *          Received data
@@ -261,6 +276,22 @@ event Opened()
 event ReceivedText(string Data)
 {
     log(self $ " received (" $ Len(Data) $ ") bytes from " $ self.Hostname);
+    // Only receive data while in a reading state
+    if (self.State != STATE_READING)
+    {
+        log(self $ " ignored data from " $ self.Hostname);
+        return;
+    }
+    // Count length of the ongoing response
+    self.ResponseLength += Len(Data);
+    // Make sure response length fits into the limit
+    if (self.ResponseLength > class'Link'.const.MAX_RESPONSE_LENGTH)
+    {
+        self.TriggerLinkFailure(
+            LE_LENGTH, "the response length of " $ self.ResponseLength $ " exceeded the limit"
+        );
+        return;
+    }
     self.OnDataReceived(self, Data);
 }
 
@@ -438,6 +469,7 @@ private function TriggerLinkReady()
     {
         self.SwitchState(STATE_IDLING);
         self.OnLinkReady(self);
+        self.ResponseLength = 0;
         return;
     }
     self.Quit();
