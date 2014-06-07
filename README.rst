@@ -60,7 +60,7 @@ The library exposes the following public classes:
 
 ClientOwner
 ^^^^^^^^^^^
-`ClientOwner` is an interface that your class must implement in order to access the Client API::
+``ClientOwner`` is an interface that your class must implement in order to access the Client API::
 
   public function OnRequestSuccess(int StatusCode, string Response, string Hostname, int Port)
 
@@ -71,7 +71,7 @@ ClientOwner
 
 Client
 ^^^^^^
-In order to interact with a remote HTTP service you must obtain an instance of the `Client` class::
+In order to interact with a remote HTTP service you must obtain an instance of the ``Client`` class::
 
   class MyClass extends Core.Object implements HTTP.ClientOwner;
   import enum eClientError from HTTP.Client;
@@ -104,16 +104,16 @@ In order to interact with a remote HTTP service you must obtain an instance of t
     Super.Destroyed();
   }
 
-`Send` is the only Client method that is exposed to public::
+``Send`` is the only ``Client`` method that is exposed to public::
 
   // Send an empty GET request
   Client.Send(Spawn('HTTP.Message'), "http://example.com/", 'GET', self)
 
 Message
 ^^^^^^^
-The `Message` class is an abstraction over HTTP request/response messaging. 
+The ``Message`` class is an abstraction over HTTP request/response messaging. 
 
-Note: Unlike request objects that you must create manually and pass it to a client, a response `Message` object is not a part of the public API.
+Note: Unlike request objects that you must create manually and pass it to a client, a response ``Message`` object is not a part of the public API.
 
 Consider the following example::
 
@@ -159,14 +159,14 @@ If you need to send the same request to multiple sources then consider this exam
 
 Utils
 ^^^^^
-`Utils` is a collection of helper static methods::
+``Utils`` is a collection of helper static methods::
 
   bool ParseUrl(string Url, out string Hostname, out string Location, out optional int Port)
   string EncodeUrl(string String, optional string Safe)
   string EscapeHtml(string String)
   string EscapeHtml(string String)
 
-Consider the following examples that exploit `Utils`
+Consider the following examples that exploit ``Utils``
 
 * Parse url components::
 
