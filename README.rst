@@ -17,9 +17,9 @@ Dependencies
 Installation
 ============
 
-0. Install required packages listed above in the **Dependencies** section.
+0. Install the required packages listed above in the **Dependencies** section.
 
-1. Download compiled binaries or compile the ``HTTP`` package yourself.
+1. Download the compiled binaries or compile the package yourself.
 
    Every release is accompanied by two tar files, each containing a compiled package for a specific game version::
 
