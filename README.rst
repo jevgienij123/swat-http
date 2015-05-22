@@ -1,7 +1,7 @@
 swat-http
 %%%%%%%%%
 
-:Version:           1.1.0
+:Version:           1.2.0
 :Home page:         https://github.com/sergeii/swat-http
 :Author:            Sergei Khoroshilov <kh.sergei@gmail.com>
 :License:           The MIT License (http://opensource.org/licenses/MIT)

@@ -26,24 +26,24 @@ def setup():
 @roles('ucc')
 def deploy():
     """Deploy package source code onto virtual machine."""
-    with quiet():
-        for kit, opts in env.kits.items():
-            source_dir = env.ucc['path'].child(opts['mod'], opts['content'])
-            for package, repo in env.ucc['packages']:
-                # checkout package repo to a tmp directory
-                local_repo = tmp()
-                checkout(repo, local_repo)
+    for kit, opts in env.kits.items():
+        source_dir = env.ucc['path'].child(opts['mod'], opts['content'])
+        for package, repo in env.ucc['packages']:
+            # checkout package repo to a tmp directory
+            local_repo = tmp()
+            checkout(repo, local_repo)
+            with quiet():
                 # rm existing package source directory
                 run(r'rm -rf {}'.format(source_dir.child(package)))
                 # deploy package source code
                 run(r'cp -r {0} {1}'.format(local_repo.child(package), source_dir))
-            with system(kit):
-                with edit_ini('UCC.ini') as ini:
-                    for package, _ in env.ucc['packages']:
-                        ini.append_unique(
-                            r'[Editor.EditorEngine]', 
-                            r'EditPackages={0}'.format(package)
-                        )
+        with system(kit):
+            with edit_ini('UCC.ini') as ini:
+                for package, _ in env.ucc['packages']:
+                    ini.append_unique(
+                        r'[Editor.EditorEngine]', 
+                        r'EditPackages={0}'.format(package)
+                    )
 
 @task
 @roles('ucc')

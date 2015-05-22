@@ -9,6 +9,12 @@ from .utils import here
 
 
 @task
+def all():
+    readme()
+    release()
+
+
+@task
 def readme():
     """Generate README and CHANGES html files from their respective rst sources."""
     with here():

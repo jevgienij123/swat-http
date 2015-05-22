@@ -70,9 +70,16 @@ var protected array<Link> Links;
  *          A ClientOwner instance that should a tied with the new request
  * @param   int Attempts
  *          Times this request will be allowed to requeued in case of a failure
+ * @param   bool HideUserAgent (optional)
+ *          Do not attach the User-Agent header
+ * @param   bool ConnectionClose (optional)
+ *          Set the value of the Connection header to "close", Keep-Alive otherwise.
  * @return  void
  */
-public function Send(Message Message, string URL, name Method, ClientOwner Owner, optional int Attempts)
+public function Send(
+    Message Message, string URL, name Method, ClientOwner Owner, optional int Attempts, 
+    optional bool HideUserAgent, optional bool ConnectionClose
+)
 {
     local Request Request;
     local string Hostname, Location, QueryString;
@@ -94,10 +101,20 @@ public function Send(Message Message, string URL, name Method, ClientOwner Owner
     // key1=value2&key2=value query string (url-safe)
     QueryString = Message.AssembleQueryString();
     // Headers
-    Message.AddHeader("User-Agent", "SWAT-HTTP/" $ class'Package'.const.VERSION);
     Message.AddHeader("Accept", "*/*");
     Message.AddHeader("Host", Hostname);
-    Message.AddHeader("Connection", "Keep-Alive");
+    if (!HideUserAgent)
+    {
+        Message.AddHeader("User-Agent", "SWAT-HTTP/" $ class'Package'.const.VERSION);
+    }
+    if (ConnectionClose)
+    {
+        Message.AddHeader("Connection", "close");
+    }
+    else
+    {
+        Message.AddHeader("Connection", "Keep-Alive");
+    }
     // Set method specific headers
     switch (Method)
     {

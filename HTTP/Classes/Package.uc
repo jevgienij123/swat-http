@@ -22,7 +22,7 @@ class Package extends SwatGame.SwatMutator;
  * THE SOFTWARE.
  */
 
-const VERSION = "1.1.0";
+const VERSION = "1.2.0";
 
 public function PreBeginPlay()
 {
